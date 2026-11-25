@@ -11,8 +11,8 @@ BidChain Gallery จัดประมูลงานศิลปะและส
 | รายการ | ค่า |
 |---|---|
 | Contract Address (Sepolia) | `0x1De8b42f3cb63Ce383F16Cd4229Cd1679C686dc4` |
-| GitHub Pages | https://arayakositkrai.github.io/bidchain-auction/ |
-| GitHub Repository | https://github.com/ArayaKositkrai/bidchain-auction |
+| Vercel| https://bidchain-auctions-docs.vercel.app/ |
+| GitHub Repository | tps://github.com/Teemo0909/bidchain-auctions |
 | ดู Contract บน Etherscan | https://sepolia.etherscan.io/address/0x1De8b42f3cb63Ce383F16Cd4229Cd1679C686dc4 |
 
 ---
