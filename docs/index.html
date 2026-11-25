@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BidChain Gallery — ระบบประมูลสินค้าและคืนเงินผู้แพ้ประมูล</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23f2eee5%22/><circle cx=%2250%22 cy=%2250%22 r=%2230%22 fill=%22%23e2462c%22/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Serif+Thai:wght@400;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="#" data-view="collection"><em>BidChain</em><span>Gallery</span></a>
+    <nav class="nav">
+      <a href="#" data-view="collection" class="active">คอลเลกชัน</a>
+      <a href="#" data-view="sell">ฝากขาย</a>
+      <a href="#" data-view="wallet">กระเป๋าของฉัน <b id="navRefund" class="pill hidden"></b></a>
+      <a href="#" data-view="activity">บันทึกธุรกรรม</a>
+      <a href="#" data-view="platform" id="navPlatform" class="hidden">แพลตฟอร์ม</a>
+    </nav>
+    <div class="wallet">
+      <span id="netBadge" class="net">ยังไม่เชื่อมต่อ</span>
+      <button id="connectBtn" class="btn ink">เชื่อมต่อ MetaMask</button>
+    </div>
+  </header>
+
+  <div id="notice" class="notice hidden"></div>
+
+  <!-- ================= COLLECTION ================= -->
+  <section class="view" id="view-collection">
+    <div class="hero">
+      <div class="hero-text">
+        <p class="kicker">Auction &amp; Bid Refund Platform · Ethereum Sepolia</p>
+        <h1>ศิลปะทุกชิ้น<br />ประมูลอย่าง <em>โปร่งใส</em></h1>
+        <p class="lede">วางมัดจำเพื่อเข้าประมูล ถูกแซงเมื่อไหร่ได้มัดจำคืนทันที ผู้ชนะชำระส่วนที่เหลือ แล้วผู้ขายได้รับเงินอัตโนมัติ ผ่าน Smart Contract ทุกขั้นตอน</p>
+        <div class="hero-stats">
+          <div><span id="stLive">–</span><label>กำลังประมูล</label></div>
+          <div><span id="stLots">–</span><label>รายการทั้งหมด</label></div>
+          <div><span id="stBids">–</span><label>การเสนอราคา</label></div>
+          <div><span id="stLocked">–</span><label>มัดจำที่ล็อกอยู่</label></div>
+        </div>
+      </div>
+      <figure class="hero-art" id="heroArt"></figure>
+    </div>
+
+    <div class="section-head">
+      <h2><em>The</em> Collection</h2>
+      <div class="chips" id="filters">
+        <button class="chip active" data-f="all">ทั้งหมด <b></b></button>
+        <button class="chip" data-f="0">Live · กำลังประมูล <b></b></button>
+        <button class="chip" data-f="1">AwaitingPayment · รอชำระ <b></b></button>
+        <button class="chip" data-f="2">Settled · ขายแล้ว <b></b></button>
+        <button class="chip" data-f="3">ReserveNotMet · ไม่ถึง Reserve <b></b></button>
+        <button class="chip" data-f="4">NoBids · ไม่มีผู้ประมูล <b></b></button>
+        <button class="chip" data-f="5">Defaulted · ยึดมัดจำ <b></b></button>
+        <button class="chip" data-f="6">Cancelled · ยกเลิก <b></b></button>
+      </div>
+    </div>
+    <div class="lots" id="lots"></div>
+  </section>
+
+  <!-- ================= SELL ================= -->
+  <section class="view hidden" id="view-sell">
+    <div class="sell">
+      <form id="sellForm" class="form">
+        <p class="kicker">Consign a Work</p>
+        <h2>ฝากขายผลงาน</h2>
+        <label>ชื่อผลงาน<input name="title" required maxlength="80" placeholder="เช่น Morning Tide No.3" /></label>
+        <label>รายละเอียด / ศิลปิน / เทคนิค<textarea name="description" rows="3" placeholder="ศิลปิน, ปีที่สร้าง, เทคนิค, ขนาด"></textarea></label>
+        <div class="row">
+          <label>ภาพผลงาน
+            <select name="imgMode"><option value="gen">ภาพ Generative (สร้างจาก seed)</option><option value="url">ลิงก์รูปภาพ (URL / ipfs://)</option></select>
+          </label>
+          <label class="imgSeed">Seed<input name="seed" type="number" min="1" value="1" /></label>
+          <label class="imgUrl hidden">URL<input name="url" placeholder="https://... หรือ ipfs://..." /></label>
+        </div>
+        <div class="row">
+          <label>ราคาเริ่มต้น (ETH)<input name="start" type="number" step="any" min="0" required value="0.01" /></label>
+          <label>Reserve Price (ETH)<input name="reserve" type="number" step="any" min="0" required value="0.02" /></label>
+        </div>
+        <div class="row">
+          <label>เพิ่มราคาขั้นต่ำ (ETH)<input name="inc" type="number" step="any" min="0" required value="0.001" /></label>
+          <label>มัดจำ (ETH)<input name="dep" type="number" step="any" min="0" required value="0.002" /></label>
+        </div>
+        <div class="row">
+          <label>ปิดประมูล<input name="end" type="datetime-local" required /></label>
+          <label>เวลาให้ผู้ชนะชำระ<select name="win">
+            <option value="600">10 นาที</option><option value="3600">1 ชั่วโมง</option><option value="86400" selected>1 วัน</option><option value="259200">3 วัน</option>
+          </select></label>
+        </div>
+        <p class="hint">มัดจำต้องไม่เกินราคาเริ่มต้น · Reserve ต้องไม่ต่ำกว่าราคาเริ่มต้น · ค่าธรรมเนียมแพลตฟอร์ม 2.5% หักเมื่อขายได้</p>
+        <button class="btn red big" type="submit">ส่งผลงานเข้าประมูล</button>
+      </form>
+      <aside class="preview">
+        <p class="kicker">Preview</p>
+        <div id="sellPreview"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= WALLET ================= -->
+  <section class="view hidden" id="view-wallet">
+    <div class="section-head"><h2><em>My</em> Wallet</h2></div>
+    <div class="wallet-grid">
+      <div class="refund-card">
+        <p class="kicker">ยอดคืนที่ถอนได้</p>
+        <div class="big" id="myRefund">–</div>
+        <p class="hint">มัดจำที่ถูกแซง มัดจำคืนเมื่อไม่ถึง Reserve และรายได้จากการขาย (ผู้ขาย) จะถูกบันทึกไว้ที่นี่ ถอนได้ตลอดเวลา</p>
+        <button class="btn red big" id="withdrawBtn" disabled>ถอนเงินคืน</button>
+      </div>
+      <div>
+        <h3 class="sub">ผลงานที่ฉันประมูล</h3>
+        <div class="list" id="myBids"></div>
+        <h3 class="sub">ผลงานที่ฉันฝากขาย</h3>
+        <div class="list" id="myLots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ACTIVITY ================= -->
+  <section class="view hidden" id="view-activity">
+    <div class="section-head">
+      <h2><em>The</em> Ledger</h2>
+      <label class="check"><input type="checkbox" id="onlyMine" /> เฉพาะที่เกี่ยวกับฉัน</label>
+    </div>
+    <table class="ledger">
+      <thead><tr><th>เวลา</th><th>เหตุการณ์</th><th>Lot</th><th>รายละเอียด</th><th>Tx</th></tr></thead>
+      <tbody id="ledger"></tbody>
+    </table>
+  </section>
+
+  <!-- ================= PLATFORM ================= -->
+  <section class="view hidden" id="view-platform">
+    <div class="section-head"><h2><em>Platform</em> Fees</h2></div>
+    <div class="refund-card narrow">
+      <p class="kicker">ค่าธรรมเนียมสะสม (2.5%)</p>
+      <div class="big" id="fees">–</div>
+      <button class="btn ink big" id="feesBtn">ถอนค่าธรรมเนียม</button>
+    </div>
+  </section>
+
+  <dialog id="lotDialog"><div id="lotBody"></div></dialog>
+  <div id="toasts"></div>
+
+  <footer class="colophon">
+    <div><em>BidChain</em> Gallery</div>
+    <div>Solidity · ethers.js · MetaMask · Sepolia</div>
+    <div id="contractLink"></div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+  <script src="config.js"></script>
+  <script src="abi.js"></script>
+  <script src="art.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

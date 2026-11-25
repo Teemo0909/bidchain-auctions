@@ -1,0 +1,19 @@
+{
+  "name": "bidchain-auction",
+  "version": "1.0.0",
+  "description": "BidChain Gallery — Auction & Bid Refund Platform (deposit model)",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "abi": "node scripts/export-abi.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.0"
+  }
+}
